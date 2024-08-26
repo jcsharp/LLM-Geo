@@ -1,5 +1,5 @@
-import LLM_Geo_Constants as constants
-import helper
+from . import LLM_Geo_Constants as constants
+from . import helper
 import os
 import requests
 import networkx as nx

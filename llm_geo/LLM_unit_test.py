@@ -1,11 +1,11 @@
 import unittest
-import  LLM_Geo_Constants as constants
-import LLM_Geo_kernel
-import helper
+from . import LLM_Geo_Constants as constants
+from . import LLM_Geo_kernel
+from . import helper
 import pickle
 import os
 import networkx as nx
-from LLM_Geo_kernel import Solution
+from .LLM_Geo_kernel import Solution
 import sys
 import traceback
 

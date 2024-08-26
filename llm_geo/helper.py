@@ -17,7 +17,7 @@ import geopandas as gpd
 from pyvis.network import Network
  
 
-import LLM_Geo_Constants as constants
+from . import LLM_Geo_Constants as constants
 
 #load config
 config = configparser.ConfigParser()
@@ -300,7 +300,7 @@ def show_graph(G):
                 )
 
     nt.from_nx(G)
-    
+
     sinks = find_sink_node(G)
     sources = find_source_node(G)
     # print("sinks:", sinks)
@@ -330,7 +330,9 @@ def show_graph(G):
         # nt.nodes[i]['shape'] = 'box'
         nt.nodes[i]['shape'] = 'dot'
         # nt.set_node_style(node, shape="box")
-         
+
+    nt.toggle_physics(True)
+
     return nt
 
 

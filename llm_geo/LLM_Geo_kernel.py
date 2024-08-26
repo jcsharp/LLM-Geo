@@ -591,10 +591,12 @@ class Solution():
 
         sampling_data_requirement_str = '\n'.join(
             [f"{idx + 1}. {line}" for idx, line in enumerate(constants.sampling_data_requirement)])
-        sampling_data_review_prompt = f"Your role: {constants.sampling_data_role} \n" + \
-                          f"Your task: {constants.sampling_task_prefix} \n\n" + \
-                          f"Requirement: \n{sampling_data_requirement_str} \n\n" + \
-                          f"The function code is: \n----------\n{code} \n----------\n\n" #+ \
+        sampling_data_review_prompt = (
+            f"Your role: {constants.sampling_data_role} \n"
+            + f"Your task: {constants.sampling_task_prefix} \n\n"
+            + f"Requirement: \n{sampling_data_requirement_str} \n\n"
+            + f"The function code is: \n----------\n{operation_code} \n----------\n\n"
+        ) #+ \
                           # f"The requirements for the code is: \n----------\n{sampling_data_requirement_str} \n----------\n\n"
 
         print("LLM is reviewing the direct request code... \n")

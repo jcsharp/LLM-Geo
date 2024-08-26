@@ -1,13 +1,15 @@
-import unittest
-from . import LLM_Geo_Constants as constants
-from . import LLM_Geo_kernel
-from . import helper
-import pickle
 import os
-import networkx as nx
-from .LLM_Geo_kernel import Solution
+import pickle
 import sys
 import traceback
+import unittest
+
+import networkx as nx
+
+from . import LLM_Geo_Constants as constants
+from . import LLM_Geo_kernel, helper
+from .LLM_Geo_kernel import Solution
+
 
 class MyTestCase(unittest.TestCase):
     def test_get_LLM_response_for_graph(self):
@@ -17,24 +19,24 @@ class MyTestCase(unittest.TestCase):
         """
 
         # API_DOC_LOCATION = [(1, r'https://raw.githubusercontent.com/gladcolor/LLM-Geo/master/COVID-19/CensusData_API_DOC.txt')]
-        API_DOC_LOCATION = [(1, r'./COVID-19/CensusData_API_DOC.txt')]
+        API_DOC_LOCATION = [(1, r"./COVID-19/CensusData_API_DOC.txt")]
 
         # [(Input_data_index, API_cocumentation_path)]
 
         DATA_LOCATIONS = [
             "COVID-19 data case in 2021 (county-level): https://github.com/nytimes/covid-19-data/raw/master/us-counties-2021.csv. It is a CSV file; there are 5 columns: date (format: 2021-02-01),county,state,fips,cases,deaths",
             "Population data: use Python library CensusData to obtain data. ",
-            ]
+        ]
 
         # add the API documentation to DATA_LOCATION
         for idx, path in API_DOC_LOCATION:
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, "r", encoding="utf-8") as f:
                 docs = f.readlines()
-            docs = '\n'.join(docs)
+            docs = "\n".join(docs)
 
             DATA_LOCATIONS[idx] += "The documentation is: \n" + docs
 
-        task_name ='COVID-19_infection_rate'
+        task_name = "COVID-19_infection_rate"
 
         save_dir = os.path.join(os.getcwd(), task_name)
         os.makedirs(save_dir, exist_ok=True)
@@ -62,26 +64,40 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)  # add assertion here
 
     def test_get_ancestor_code(self):
-        with open(r'E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
+        with open(
+            r"E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl",
+            "rb",
+        ) as f:
             solution = pickle.load(f)
         operations = solution.operations
 
         for idx, operation in enumerate(operations):
-            print(operation['node_name'])
-            ancestor_operations = solution.get_ancestor_operations(operation['node_name'])
-            ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
+            print(operation["node_name"])
+            ancestor_operations = solution.get_ancestor_operations(
+                operation["node_name"]
+            )
+            ancestor_operation_codes = "\n".join(
+                [oper["operation_code"] for oper in ancestor_operations]
+            )
             print(ancestor_operations)
             print(f"operation {operation['node_name']}: \n", ancestor_operation_codes)
 
-            descendant_operations = solution.get_descendant_operations(operation['node_name'])
-            descendant_operations_definition = solution.get_descendant_operations_definition(descendant_operations)
+            descendant_operations = solution.get_descendant_operations(
+                operation["node_name"]
+            )
+            descendant_operations_definition = (
+                solution.get_descendant_operations_definition(descendant_operations)
+            )
             # print(f"descendant_operations_definition \n", descendant_operations_definition)
 
         self.assertEqual(True, True)  # add assertion here
 
     def test_get_prompt_for_an_opearation(self):
         # with open(r'E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
-        with open(r'F:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
+        with open(
+            r"F:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl",
+            "rb",
+        ) as f:
             solution = pickle.load(f)
 
         solution.load_graph_file()
@@ -91,22 +107,20 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)  # add assertion here
 
     def test_extractcontent_content_from_LLM_reply(self):
-        prompt = 'Write a python program to compute the delta time. The code should be inside a python code block between : ```python\n```.'
+        prompt = "Write a python program to compute the delta time. The code should be inside a python code block between : ```python\n```."
         response = helper.get_LLM_reply(prompt=prompt)
         content = helper.extract_content_from_LLM_reply(response)
         print()
-        print('-------------- Content ---------------: \n', content, '\n')
+        print("-------------- Content ---------------: \n", content, "\n")
         code = helper.extract_code(response=response)
         print("-------------- Code ---------------: \n", code)
         self.assertEqual(True, True)
-
-
-
 
     def error_test(self):
         code = """a = 1/0
                 """
         exec(code)
+
     def test_Error_exception(self):
         try:
             self.error_test()
@@ -136,8 +150,5 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-
-

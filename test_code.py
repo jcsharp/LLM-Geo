@@ -45,7 +45,7 @@ def f2():
 f1()
 """
 
-a = compile(code, 'Complete program', 'exec')
+a = compile(code, "Complete program", "exec")
 
 import sys
 import traceback
@@ -75,13 +75,15 @@ import traceback
 #     print(error_info_str)
 
 
-class LLM_Test():
+class LLM_Test:
     def execute_complete_program(self, code: str, try_cnt: int = 1) -> str:
-        compiled_code = compile(code, 'Complete program', 'exec')
+        compiled_code = compile(code, "Complete program", "exec")
 
         count = 0
         while count < try_cnt:
-            print(f"\n\n-------------- Running code (trial # {count + 1}/{try_cnt}) --------------\n\n")
+            print(
+                f"\n\n-------------- Running code (trial # {count + 1}/{try_cnt}) --------------\n\n"
+            )
             try:
                 count += 1
                 exec(compiled_code, globals())  # #pass only globals() not locals()
@@ -95,7 +97,6 @@ class LLM_Test():
             #     line_number = err.lineno
             #
             except Exception as err:
-
                 cl, exc, tb = sys.exc_info()
                 line_number = traceback.extract_tb(tb)[-1][1]
 
@@ -111,21 +112,25 @@ class LLM_Test():
 
         return error_info_str
 
-
     def get_debug_prompt(self, exception, code):
         etype, exc, tb = sys.exc_info()
         exttb = traceback.extract_tb(tb)
 
         ## Fill the missing data:
-        exttb2 = [(fn, lnnr, funcname,
-                   (code.splitlines()[lnnr - 1] if fn == 'Complete program'
-                    else line))
-                  for fn, lnnr, funcname, line in exttb]
+        exttb2 = [
+            (
+                fn,
+                lnnr,
+                funcname,
+                (code.splitlines()[lnnr - 1] if fn == "Complete program" else line),
+            )
+            for fn, lnnr, funcname, line in exttb
+        ]
 
         # Print:
         print(f"traceback.format_exc():\n{traceback.format_exc()}")
 
-        error_info_str = 'Traceback (most recent call last):\n'
+        error_info_str = "Traceback (most recent call last):\n"
         # sys.stderr.write('Traceback (most recent call last):\n')
         for line in traceback.format_list(exttb2[1:]):
             # sys.stderr.write(line)
@@ -137,7 +142,6 @@ class LLM_Test():
         # traceback.print_exc()
 
         # print("error_info_str:", error_info_str)
-
 
         return error_info_str
 
